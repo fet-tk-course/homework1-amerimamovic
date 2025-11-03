@@ -1,3 +1,5 @@
+import kotlin.collections.filterIsInstance
+
 fun main() {
     val inzenjeri = listOf<inzenjer>(
         softverskiInzenjer("Edin", "Hodžić","dipl. ing. softverski inženjer", 3, listOf("Java", "Spring"), 6),
@@ -28,6 +30,13 @@ fun main() {
     println("Zbir projekata i certifikata svih inženjera")
     val ukupno = ukupnoProjekataICertifikata(inzenjeri)
     println("Ukupan broj : $ukupno")
+
+
+    println("Score inzenjera ${inzenjeri[0].ime} je: ${inzenjeri[0].efficiencyScore()}")
+
+
+
+
 }
 
 interface osoba{
@@ -79,6 +88,12 @@ open class inzenjer(
     {
         return "Ime i prezime inženjera je ${ime} ${prezime}, njegova titula je ${titula}, godine iskustva ${godineIskustva} i njegove ekspertize su ${ekspertize}"
     }
+
+    open fun efficiencyScore() : Int
+    {
+        return godineIskustva
+    }
+
 }
 
 class softverskiInzenjer(
@@ -94,6 +109,16 @@ class softverskiInzenjer(
     {
         return "Ime i prezime inženjera je ${ime} ${prezime}, njegova titula je ${titula}, godine iskustva ${godineIskustva}, njegove ekspertize su ${ekspertize} i broj njegovih projekata je ${brojProjekata}            "
     }
+
+    override fun efficiencyScore() : Int
+    {
+        return brojProjekata*godineIskustva
+
+    }
+
+
+
+
 
     fun uspjesnost() : String
     {
@@ -128,6 +153,15 @@ class inzenjerElektrotehnike(
     {
         return "Ime i prezime inženjera je ${ime} ${prezime}, njegova titula je ${titula}, godine iskustva ${godineIskustva}, njegove ekspertize su ${ekspertize} i broj njegovih projekata je ${brojCertifikata}            "
     }
+
+    override fun efficiencyScore() : Int
+    {
+        return brojCertifikata*godineIskustva
+    }
+
+
+
+
 
     fun uspjesnost() : String
     {
@@ -200,3 +234,30 @@ fun ukupnoProjekataICertifikata (inzenjer : List<inzenjer>) : Int
 
 
 
+fun najveciScore (inzenjer : List<inzenjer>) : Int
+{
+    val softver =
+    val elektro =
+    val najboljiSoft : Int
+    val najboljiElektor : Int
+
+    if(softver.isNotEmpty())
+    {
+        var i = softver.reduce { prvi , drugi -> if((prvi.godineIskustva*prvi.brojProjekata) >= (drugi.godineIskustva*drugi.brojProjekata)) prvi else drugi }
+       najboljiSoft = i
+    }
+    if(elektro.isNotEmpty())
+    {
+        var i = elektro.reduce { prvi , drugi -> if((prvi.godineIskustva*prvi.brojCertifikata) >= (drugi.godineIskustva*drugi.brojCertifikata)) prvi else drugi }
+        najboljiElektor = i
+    }
+
+    if(najboljiSoft<najboljiElektor)
+    {
+        return najboljiElektor
+    }
+    else
+    {
+        return najboljiSoft
+    }
+}
